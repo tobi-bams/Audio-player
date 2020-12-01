@@ -7,7 +7,21 @@
     <title>Audio Music Player</title>
 </head>
 <body>
-    <p id="playButton">Play</p>
+    <main>
+        <div>
+            <img>
+        </div>
+        <div class="controls">
+            <div class="range">
+                <input type="range" min="0" max="600" value="0" id="audioRange">
+            </div>
+            <div class="audioControls">
+                <img src="./assets/controls/backward.svg" alt="Backward Button" id="backward" class="control">
+                <img src="./assets/controls/play.svg" alt="Audio Playing Status" id="audioStatus" class="control">
+                <img src="./assets/controls/forward.svg" alt="Forward button" id="forward" class="control">
+            </div>
+        </div>
+    </main>
     <script src="./index.js"></script>
 </body>
 </html>
