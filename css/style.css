@@ -6,6 +6,10 @@ body{
     font-family: poppins;
     box-sizing: border-box;
 }
+p{
+    padding: 0;
+    margin: 0;
+}
 
 main{
     height: 100%;
@@ -44,9 +48,11 @@ main{
     padding-left: 2em;
     padding-right: 2em;
     transition: 1s ease-out;
+    display: flex;
+    justify-content: space-between;
 }
 #audioRange{
-    width: 100%;
+    width: 92%;
     cursor: pointer;
 }
 
