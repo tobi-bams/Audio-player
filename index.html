@@ -8,13 +8,20 @@
 </head>
 <body>
     <main>
-        <div>
-            <img>
+        <div class="playlist">
+            
+        </div>
+        <div class="details">
+            <img src="./assets/images/image1.jpg" id="audioImage">
+            <p id="title">Happy</p>
         </div>
         <div class="controls">
             <div class="range">
                 <input type="range" min="0" max="600" value="0" id="audioRange">
-                <p id="playingStatus"></p>
+                <div class="durationStatus">
+                    <p id="playingStatus">0:00</p>
+                    <p id="duration">--:--</p>
+                </div>
             </div>
             <div class="audioControls">
                 <img src="./assets/controls/backward.svg" alt="Backward Button" id="backward" class="control">
