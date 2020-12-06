@@ -8,8 +8,26 @@
 </head>
 <body>
     <main>
-        <div class="playlist">
-            
+        <div id="newPlayListContainer">
+            <div class="newPlaylist">
+                <h4>Create New Playlist</h4>
+                <div class="form">
+                    <div>
+                        <label for="playlistName">PlayList Name</label>
+                        <input type="text" placeholder="New Playlist Name" id="playlistName">
+                    </div>
+                    <div class="playListControl Buttons">
+                        <button id="savePlaylist">Create Playlist</button>
+                        <button id="cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="playlistContainer">
+            <div class="playlist">
+                <button id="createPlaylist"><img src="./assets/controls/plus circle.svg" alt="Create Playlist Button" id="plusCircle"></button>
+                <p>Create Playlist</p>
+            </div>
         </div>
         <div class="details">
             <img src="./assets/images/image1.jpg" id="audioImage">

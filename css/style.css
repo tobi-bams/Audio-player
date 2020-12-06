@@ -22,6 +22,33 @@ main{
     box-sizing: border-box;
 }
 
+.playlistContainer{
+    width: 100%;
+    height: 15em;
+    margin-top: 1em;
+    padding-left: 1em;
+    box-sizing: border-box;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#createPlaylist{
+    height: 6em;
+    width: 6em;
+    border-radius: 1em;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
 
 .details{
     display: flex;
@@ -35,7 +62,7 @@ main{
 }
 
 #audioImage{
-    height: 22em;
+    height: 20em;
     max-width: 100%;
     border-radius: 1em;
 }
@@ -60,7 +87,8 @@ main{
 }
 
 .control{
-    height: 3em;
+    height: 2.5em;
+    margin-bottom: 0.5em;
     padding-left: 1em;
     padding-right: 1em;
     cursor: pointer;
@@ -85,4 +113,8 @@ main{
     display: flex;
     justify-content: space-between;
     color: white;
+}
+
+#newPlayListContainer{
+    position: absolute;
 }

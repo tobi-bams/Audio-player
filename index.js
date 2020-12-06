@@ -10,6 +10,7 @@ let playingStatus = document.getElementById("playingStatus");
 let audioDuration = document.getElementById("duration");
 let audioTitle = document.getElementById("title");
 let audioImage = document.getElementById("audioImage");
+let createPlaylist = document.getElementById("createPlaylist");
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
