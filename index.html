@@ -10,22 +10,23 @@
     <main>
         <div id="newPlayListContainer">
             <div class="newPlaylist">
-                <h4>Create New Playlist</h4>
+                <h3>Create New Playlist</h3>
                 <div class="form">
-                    <div>
-                        <label for="playlistName">PlayList Name</label>
+                    <div class="inputItems">
+                        <label for="playlistName">PlayList Name:</label>
                         <input type="text" placeholder="New Playlist Name" id="playlistName">
+                        <small id="playlistNameError">Please Provide Playlist Title</small>
                     </div>
-                    <div class="playListControl Buttons">
+                    <div class="playListControlButtons">
                         <button id="savePlaylist">Create Playlist</button>
                         <button id="cancel">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="playlistContainer">
+        <div class="playlistContainer" id="playlistContainer">
             <div class="playlist">
-                <button id="createPlaylist"><img src="./assets/controls/plus circle.svg" alt="Create Playlist Button" id="plusCircle"></button>
+                <button id="createPlaylist" class="playlistButtons"><img src="./assets/controls/plus circle.svg" alt="Create Playlist Button" id="plusCircle"></button>
                 <p>Create Playlist</p>
             </div>
         </div>

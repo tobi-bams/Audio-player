@@ -11,6 +11,12 @@ let audioDuration = document.getElementById("duration");
 let audioTitle = document.getElementById("title");
 let audioImage = document.getElementById("audioImage");
 let createPlaylist = document.getElementById("createPlaylist");
+let savePlaylist = document.getElementById("savePlaylist");
+let cancel = document.getElementById("cancel");
+let newPlayListContainer = document.getElementById("newPlayListContainer");
+let playlistName = document.getElementById("playlistName");
+let playlistNameError = document.getElementById("playlistNameError");
+let playlistContainer = document.getElementById("playlistContainer");
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
@@ -103,4 +109,48 @@ backward.addEventListener("click", () => {
     else{
         currentlyPlaying += 1;
     }
+})
+
+// Playlist code
+
+savePlaylist.addEventListener("click", () => {
+    if(playlistName.value === ""){
+        playlistName.style.border = "2px solid black";
+        playlistNameError.style.display = "inline";
+    }
+    else{
+        newPlayListContainer.style.display = "none";
+        creatingTiles();
+        playlistName.value = "";
+    } 
+});
+
+function creatingTiles(){
+    let firstDiv = document.createElement("div");
+    firstDiv.className = "playlist";
+    let innerDiv = document.createElement("button");
+    innerDiv.className = "playlistButtons";
+    innerDiv.style.backgroundColor = "red";
+    let playListTitle = document.createElement("p");
+    playListTitle.textContent = playlistName.value;
+
+    firstDiv.appendChild(innerDiv);
+    firstDiv.appendChild(playListTitle);
+    playlistContainer.prepend(firstDiv);
+}
+
+playlistName.addEventListener("input", () => {
+    playlistName.style.border = "2px solid grey";
+    playlistNameError.style.display = "none";
+})
+
+createPlaylist.addEventListener("click", () => {
+    newPlayListContainer.style.display = "flex";
+})
+
+cancel.addEventListener("click", () => {
+    newPlayListContainer.style.display = "none";
+    playlistName.value = "";
+    playlistName.style.border = "2px solid grey";
+    playlistNameError.style.display = "none";
 })
