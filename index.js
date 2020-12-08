@@ -120,17 +120,17 @@ savePlaylist.addEventListener("click", () => {
     }
     else{
         newPlayListContainer.style.display = "none";
-        creatingTiles();
+        creatingPlaylistUI();
         playlistName.value = "";
     } 
 });
 
-function creatingTiles(){
+function creatingPlaylistUI(){
     let firstDiv = document.createElement("div");
     firstDiv.className = "playlist";
     let innerDiv = document.createElement("button");
     innerDiv.className = "playlistButtons";
-    innerDiv.style.backgroundColor = "red";
+    innerDiv.style.backgroundImage = "url('./assets/images/image1.jpg')";
     let playListTitle = document.createElement("p");
     playListTitle.textContent = playlistName.value;
 
