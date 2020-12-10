@@ -17,6 +17,11 @@ let newPlayListContainer = document.getElementById("newPlayListContainer");
 let playlistName = document.getElementById("playlistName");
 let playlistNameError = document.getElementById("playlistNameError");
 let playlistContainer = document.getElementById("playlistContainer");
+let songsContainer = document.getElementById("songsContainer");
+let SelectSongsContainer = document.getElementById("SelectSongsContainer");
+let selectedPlaylistTitle = document.getElementById("selectedPlaylistTitle");
+let saveSongs = document.getElementById("saveSongs");
+let cancelSaveSongs = document.getElementById("cancelSaveSongs");
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
@@ -121,6 +126,9 @@ savePlaylist.addEventListener("click", () => {
     else{
         newPlayListContainer.style.display = "none";
         creatingPlaylistUI();
+        SelectSongsContainer.style.display = "flex";
+        selectedPlaylistTitle.textContent = playlistName.value;
+        displaySongs();
         playlistName.value = "";
     } 
 });
@@ -130,10 +138,10 @@ function creatingPlaylistUI(){
     firstDiv.className = "playlist";
     let innerDiv = document.createElement("button");
     innerDiv.className = "playlistButtons";
+    innerDiv.addEventListener("click", viewPlaylist);
     innerDiv.style.backgroundImage = "url('./assets/images/image1.jpg')";
     let playListTitle = document.createElement("p");
     playListTitle.textContent = playlistName.value;
-
     firstDiv.appendChild(innerDiv);
     firstDiv.appendChild(playListTitle);
     playlistContainer.prepend(firstDiv);
@@ -153,4 +161,32 @@ cancel.addEventListener("click", () => {
     playlistName.value = "";
     playlistName.style.border = "2px solid grey";
     playlistNameError.style.display = "none";
+});
+
+saveSongs.addEventListener("click", () => {
+    SelectSongsContainer.style.display = "none";
+    songsContainer.innerHTML = "";
+});
+
+cancelSaveSongs.addEventListener("click", () =>{
+    SelectSongsContainer.style.display = "none";
+    songsContainer.innerHTML = "";
 })
+
+function displaySongs(){
+    musicLibrary.forEach((song) => {
+        let songs = document.createElement("div");
+        songs.setAttribute("class", "songs");
+        let radio = document.createElement("div")
+        radio.setAttribute("class", "radioButton");
+        let songTitle = document.createElement("p");
+        songTitle.textContent = `${song.title} - ${song.artist}`;
+        songs.appendChild(radio);
+        songs.appendChild(songTitle);
+        songsContainer.appendChild(songs)
+    })
+}
+
+function viewPlaylist(evt){
+    console.log(evt.target.nextElementSibling.textContent)
+}
