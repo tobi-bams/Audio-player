@@ -22,10 +22,17 @@ let SelectSongsContainer = document.getElementById("SelectSongsContainer");
 let selectedPlaylistTitle = document.getElementById("selectedPlaylistTitle");
 let saveSongs = document.getElementById("saveSongs");
 let cancelSaveSongs = document.getElementById("cancelSaveSongs");
+let moreSongs = document.getElementById("moreSongs");
+let playPlayistSong = document.getElementById("playPlayistSong");
+let playPlaylistTitle = document.getElementById("playPlaylistTitle");
+let cancelPlaySongs = document.getElementById("cancelPlaySongs");
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
                         {title: "Someone Like You", artist: "Adele", image: "image1"}];
+
+let playlistTitles = [];
+let playlistData = [];
 
 audioTitle.textContent = `${musicLibrary[currentlyPlaying].title} - ${musicLibrary[currentlyPlaying].artist}` 
 audioStatus.addEventListener("click", () => {
@@ -129,6 +136,7 @@ savePlaylist.addEventListener("click", () => {
         SelectSongsContainer.style.display = "flex";
         selectedPlaylistTitle.textContent = playlistName.value;
         displaySongs();
+        playlistTitles.push(playlistName.value.toLocaleLowerCase());
         playlistName.value = "";
     } 
 });
@@ -166,6 +174,8 @@ cancel.addEventListener("click", () => {
 saveSongs.addEventListener("click", () => {
     SelectSongsContainer.style.display = "none";
     songsContainer.innerHTML = "";
+    playPlayistSong.style.display = "flex";
+    playPlaylistTitle.textContent = selectedPlaylistTitle.textContent;
 });
 
 cancelSaveSongs.addEventListener("click", () =>{
@@ -180,7 +190,9 @@ function displaySongs(){
         let radio = document.createElement("div")
         radio.setAttribute("class", "radioButton");
         let songTitle = document.createElement("p");
+        songTitle.setAttribute("data-status", "notAdded");
         songTitle.textContent = `${song.title} - ${song.artist}`;
+        songTitle.addEventListener("click", addSongToPlayList);
         songs.appendChild(radio);
         songs.appendChild(songTitle);
         songsContainer.appendChild(songs)
@@ -189,4 +201,30 @@ function displaySongs(){
 
 function viewPlaylist(evt){
     console.log(evt.target.nextElementSibling.textContent)
+}
+
+// savePlaylist.previousElementSibling
+moreSongs.addEventListener("click", (evt) => {
+    selectedPlaylistTitle.textContent = evt.target.parentElement.previousElementSibling.previousElementSibling.textContent
+    playPlayistSong.style.display = "none";
+    displaySongs();
+    SelectSongsContainer.style.display = "flex";
+})
+
+cancelPlaySongs.addEventListener('click', () => {
+    playPlayistSong.style.display = "none";
+})
+
+
+function addSongToPlayList(evt){
+    if(evt.target.getAttribute("data-status") === "notAdded"){
+        console.log("You've just successfully added your new playlist Song to DataBase");
+        evt.target.setAttribute("data-status", "added");
+    }
+    else{
+        console.log("Ops!! you just deleted a song from your playlist");
+        evt.target.setAttribute("data-status", "notAdded");
+    }
+    
+    
 }
