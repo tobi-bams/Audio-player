@@ -26,12 +26,13 @@ let moreSongs = document.getElementById("moreSongs");
 let playPlayistSong = document.getElementById("playPlayistSong");
 let playPlaylistTitle = document.getElementById("playPlaylistTitle");
 let cancelPlaySongs = document.getElementById("cancelPlaySongs");
+let storedPlaylistSongsContainer = document.getElementById("storedPlaylistSongsContainer");
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
                         {title: "Someone Like You", artist: "Adele", image: "image1"}];
 
-let playlistTitles = [];
+
 let playlistData = [];
 
 audioTitle.textContent = `${musicLibrary[currentlyPlaying].title} - ${musicLibrary[currentlyPlaying].artist}` 
@@ -136,7 +137,8 @@ savePlaylist.addEventListener("click", () => {
         SelectSongsContainer.style.display = "flex";
         selectedPlaylistTitle.textContent = playlistName.value;
         displaySongs();
-        playlistTitles.push(playlistName.value.toLocaleLowerCase());
+        let playlist = {title: playlistName.value.toLocaleLowerCase(), data: []};
+        playlistData.push(playlist);
         playlistName.value = "";
     } 
 });
@@ -174,8 +176,10 @@ cancel.addEventListener("click", () => {
 saveSongs.addEventListener("click", () => {
     SelectSongsContainer.style.display = "none";
     songsContainer.innerHTML = "";
+    let playPlaylistTitle = selectedPlaylistTitle.textContent;
+    storedPlaylistSongsContainer.innerHTML = "";
+    playlistSavedMusicDispay(playPlaylistTitle)
     playPlayistSong.style.display = "flex";
-    playPlaylistTitle.textContent = selectedPlaylistTitle.textContent;
 });
 
 cancelSaveSongs.addEventListener("click", () =>{
@@ -184,13 +188,19 @@ cancelSaveSongs.addEventListener("click", () =>{
 })
 
 function displaySongs(){
+    let songIndex = 0;
     musicLibrary.forEach((song) => {
         let songs = document.createElement("div");
         songs.setAttribute("class", "songs");
         let radio = document.createElement("div")
         radio.setAttribute("class", "radioButton");
+        let radioClick = document.createElement('div');
+        radioClick.setAttribute('class', "radioButtonClick");
+        radio.appendChild(radioClick);
         let songTitle = document.createElement("p");
         songTitle.setAttribute("data-status", "notAdded");
+        songTitle.setAttribute("data-index", songIndex);
+        songIndex += 1;
         songTitle.textContent = `${song.title} - ${song.artist}`;
         songTitle.addEventListener("click", addSongToPlayList);
         songs.appendChild(radio);
@@ -200,7 +210,10 @@ function displaySongs(){
 }
 
 function viewPlaylist(evt){
-    console.log(evt.target.nextElementSibling.textContent)
+    let playPlaylistTitle = evt.target.nextElementSibling.textContent;
+    storedPlaylistSongsContainer.innerHTML = "";
+    playlistSavedMusicDispay(playPlaylistTitle)
+    playPlayistSong.style.display = "flex";
 }
 
 // savePlaylist.previousElementSibling
@@ -215,16 +228,43 @@ cancelPlaySongs.addEventListener('click', () => {
     playPlayistSong.style.display = "none";
 })
 
-
 function addSongToPlayList(evt){
-    if(evt.target.getAttribute("data-status") === "notAdded"){
-        console.log("You've just successfully added your new playlist Song to DataBase");
+    let playlistTitle = evt.target.parentElement.parentElement.previousElementSibling.textContent.toLocaleLowerCase();
+    let songIndex = evt.target.getAttribute("data-index");
+    let index = playlistData.findIndex((playlist) => {
+        return playlist.title == playlistTitle;
+    });
+    let dataStatus = evt.target.getAttribute("data-status");
+    if(dataStatus === "notAdded"){
+        playlistData[index].data.push(songIndex);
+       evt.target.previousElementSibling.firstElementChild.style.backgroundColor = "black";
         evt.target.setAttribute("data-status", "added");
     }
     else{
-        console.log("Ops!! you just deleted a song from your playlist");
+        let deleteIndex = playlistData[index].data.indexOf(songIndex)
+        playlistData[index].data.splice(deleteIndex, 1);
+        evt.target.previousElementSibling.firstElementChild.style.backgroundColor = "white";
         evt.target.setAttribute("data-status", "notAdded");
-    }
-    
-    
+    }    
+}
+
+function playlistSavedMusicDispay(playlistTitle){
+    playPlaylistTitle.textContent = playlistTitle;
+    let playlistIndex = playlistData.findIndex((playlist) => {
+        return playlist.title == playlistTitle.toLocaleLowerCase();
+    })
+
+    playlistData[playlistIndex].data.forEach((index) => {
+        let container = document.createElement("div");
+        container.setAttribute("class", "songs");
+        let playButton = document.createElement("img");
+        playButton.setAttribute("src", "./assets/controls/play.svg");
+        playButton.setAttribute("class", "playSongButton");
+        let songTitle = document.createElement("p");
+        songTitle.textContent = `${musicLibrary[index].title} - ${musicLibrary[index].artist}`;
+        songTitle.setAttribute("class", "currentPlaylistSongTitle");
+        container.appendChild(playButton);
+        container.appendChild(songTitle);
+        storedPlaylistSongsContainer.appendChild(container);
+    })
 }
