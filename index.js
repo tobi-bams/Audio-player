@@ -135,10 +135,9 @@ savePlaylist.addEventListener("click", () => {
         newPlayListContainer.style.display = "none";
         creatingPlaylistUI();
         SelectSongsContainer.style.display = "flex";
-        selectedPlaylistTitle.textContent = playlistName.value;
-        displaySongs();
         let playlist = {title: playlistName.value.toLocaleLowerCase(), data: []};
         playlistData.push(playlist);
+        displaySongs(playlistName.value);
         playlistName.value = "";
     } 
 });
@@ -187,7 +186,11 @@ cancelSaveSongs.addEventListener("click", () =>{
     songsContainer.innerHTML = "";
 })
 
-function displaySongs(){
+function displaySongs(playlistTitle){
+    selectedPlaylistTitle.textContent = playlistTitle;
+    let playlistIndex = playlistData.findIndex((playlist) => {
+        return playlist.title == playlistTitle.toLocaleLowerCase();
+    })
     let songIndex = 0;
     musicLibrary.forEach((song) => {
         let songs = document.createElement("div");
@@ -200,6 +203,10 @@ function displaySongs(){
         let songTitle = document.createElement("p");
         songTitle.setAttribute("data-status", "notAdded");
         songTitle.setAttribute("data-index", songIndex);
+        if(playlistData[playlistIndex].data.includes(songIndex.toString())){
+            radioClick.style.backgroundColor = 'black';
+            songTitle.setAttribute("data-status", "added");
+        }
         songIndex += 1;
         songTitle.textContent = `${song.title} - ${song.artist}`;
         songTitle.addEventListener("click", addSongToPlayList);
@@ -218,9 +225,9 @@ function viewPlaylist(evt){
 
 // savePlaylist.previousElementSibling
 moreSongs.addEventListener("click", (evt) => {
-    selectedPlaylistTitle.textContent = evt.target.parentElement.previousElementSibling.previousElementSibling.textContent
+    // selectedPlaylistTitle.textContent = 
     playPlayistSong.style.display = "none";
-    displaySongs();
+    displaySongs(evt.target.parentElement.previousElementSibling.previousElementSibling.textContent);
     SelectSongsContainer.style.display = "flex";
 })
 
