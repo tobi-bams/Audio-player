@@ -27,6 +27,8 @@ let playPlayistSong = document.getElementById("playPlayistSong");
 let playPlaylistTitle = document.getElementById("playPlaylistTitle");
 let cancelPlaySongs = document.getElementById("cancelPlaySongs");
 let storedPlaylistSongsContainer = document.getElementById("storedPlaylistSongsContainer");
+let currentPlaylist = "none";
+let currentPlaylistSong = "";
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
@@ -57,7 +59,8 @@ audioStatus.addEventListener("click", () => {
 audio.addEventListener("timeupdate", (evt) => {
     audioRange.value = parseInt(((audio.currentTime / audio.duration) * 600), 10);
     if(audio.currentTime === audio.duration){
-        currentlyPlaying += 1;
+        if(currentPlaylist === "none"){
+            currentlyPlaying += 1;
         if(currentlyPlaying < musicLibrary.length){
             audioImage.setAttribute("src", `assets/images/${musicLibrary[currentlyPlaying].image}.jpg`)
             audio.setAttribute("src", `assets/${musicLibrary[currentlyPlaying].title.toLocaleLowerCase()}.mp3`);
@@ -68,6 +71,19 @@ audio.addEventListener("timeupdate", (evt) => {
             audioStatus.setAttribute("src", "assets/controls/play.svg");
             audioStatusContainer = "playing";
         }
+        }
+        else{
+            let playlistIndex = playlistData.findIndex((playlist) => {
+                return playlist.title == currentPlaylist;
+            }) 
+            let nextSongPlaylistIndex = playlistData[playlistIndex].data.indexOf(currentPlaylistSong) + 1;
+            let nextSong = playlistData[playlistIndex].data[nextSongPlaylistIndex];
+            audioImage.setAttribute("src", `assets/images/${musicLibrary[nextSong].image}.jpg`)
+            audio.setAttribute("src", `assets/${musicLibrary[nextSong].title.toLocaleLowerCase()}.mp3`);
+            audioTitle.textContent = `${musicLibrary[nextSong].title} - ${musicLibrary[nextSong].artist}`
+            audio.play();
+        }
+        
     }
     let cal = audio.duration - audio.currentTime;
     let currentPlayingTime = duration (audio.currentTime);
@@ -270,8 +286,22 @@ function playlistSavedMusicDispay(playlistTitle){
         let songTitle = document.createElement("p");
         songTitle.textContent = `${musicLibrary[index].title} - ${musicLibrary[index].artist}`;
         songTitle.setAttribute("class", "currentPlaylistSongTitle");
+        songTitle.setAttribute("song-index", `${index}`);
+        songTitle.addEventListener("click", playSong)
         container.appendChild(playButton);
         container.appendChild(songTitle);
         storedPlaylistSongsContainer.appendChild(container);
     })
+}
+
+function playSong(evt){
+    let songIndex = evt.target.getAttribute("song-index");
+    currentPlaylistSong = songIndex;
+    let playlist = evt.target.parentElement.parentElement.previousElementSibling.textContent;
+    currentPlaylist = playlist.toLocaleLowerCase();
+    audioImage.setAttribute("src", `assets/images/${musicLibrary[songIndex].image}.jpg`)
+    audio.setAttribute("src", `assets/${musicLibrary[songIndex].title.toLocaleLowerCase()}.mp3`);
+    audioTitle.textContent = `${musicLibrary[songIndex].title} - ${musicLibrary[songIndex].artist}`
+    audioStatus.setAttribute("src", "assets/controls/pause.svg")
+    audio.play();
 }
