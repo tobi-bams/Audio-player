@@ -31,6 +31,7 @@ let currentPlaylist = "none";
 let currentPlaylistSong = "";
 let platlistAlreadyExist = document.getElementById("platlistAlreadyExist");
 let localStorage = window.localStorage;
+let playlistSavedContainer = document.getElementById("playlistSavedContainer");
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
@@ -38,6 +39,13 @@ const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}
 
 
 let playlistData = [];
+
+if(localStorage.getItem("playlistData")){
+    playlistData = JSON.parse(localStorage.getItem("playlistData"));
+    playlistData.forEach((playlist) => {
+        creatingPlaylistUI(playlist.title);
+    })
+}
 
 audioTitle.textContent = `${musicLibrary[currentlyPlaying].title} - ${musicLibrary[currentlyPlaying].artist}` 
 audioStatus.addEventListener("click", () => {
@@ -64,9 +72,7 @@ audio.addEventListener("timeupdate", (evt) => {
         if(currentPlaylist === "none"){
             currentlyPlaying += 1;
         if(currentlyPlaying < musicLibrary.length){
-            audioImage.setAttribute("src", `assets/images/${musicLibrary[currentlyPlaying].image}.jpg`)
-            audio.setAttribute("src", `assets/${musicLibrary[currentlyPlaying].title.toLocaleLowerCase()}.mp3`);
-            audioTitle.textContent = `${musicLibrary[currentlyPlaying].title} - ${musicLibrary[currentlyPlaying].artist}`
+            playAudio(currentlyPlaying);
             audio.play();
         }
         else{
@@ -81,9 +87,7 @@ audio.addEventListener("timeupdate", (evt) => {
             let nextSongPlaylistIndex = playlistData[playlistIndex].data.indexOf(currentPlaylistSong) + 1;
             if(nextSongPlaylistIndex < playlistData[playlistIndex].data.length){
                 currentPlaylistSong = playlistData[playlistIndex].data[nextSongPlaylistIndex];
-                audioImage.setAttribute("src", `assets/images/${musicLibrary[currentPlaylistSong].image}.jpg`)
-                audio.setAttribute("src", `assets/${musicLibrary[currentPlaylistSong].title.toLocaleLowerCase()}.mp3`);
-                audioTitle.textContent = `${musicLibrary[currentPlaylistSong].title} - ${musicLibrary[currentPlaylistSong].artist}`
+                playAudio(currentPlaylistSong);
                 audio.play();
             }
             else{
@@ -123,9 +127,7 @@ forward.addEventListener("click", () => {
     if(currentPlaylist === "none"){
         currentlyPlaying += 1;
         if(currentlyPlaying < musicLibrary.length){
-            audioImage.setAttribute("src", `assets/images/${musicLibrary[currentlyPlaying].image}.jpg`)
-            audio.setAttribute("src", `assets/${musicLibrary[currentlyPlaying].title.toLocaleLowerCase()}.mp3`);
-            audioTitle.textContent = `${musicLibrary[currentlyPlaying].title} - ${musicLibrary[currentlyPlaying].artist}`
+            playAudio(currentlyPlaying);
             audioStatus.setAttribute("src", "assets/controls/pause.svg")
                 audio.play();
                 audioStatusContainer = "paused";
@@ -141,9 +143,7 @@ forward.addEventListener("click", () => {
         let nextSongPlaylistIndex = playlistData[playlistIndex].data.indexOf(currentPlaylistSong) + 1;
         if(nextSongPlaylistIndex < playlistData[playlistIndex].data.length){
             currentPlaylistSong = playlistData[playlistIndex].data[nextSongPlaylistIndex];
-                audioImage.setAttribute("src", `assets/images/${musicLibrary[currentPlaylistSong].image}.jpg`)
-                audio.setAttribute("src", `assets/${musicLibrary[currentPlaylistSong].title.toLocaleLowerCase()}.mp3`);
-                audioTitle.textContent = `${musicLibrary[currentPlaylistSong].title} - ${musicLibrary[currentPlaylistSong].artist}`;
+            playAudio(currentPlaylistSong);
                 audioStatus.setAttribute("src", "assets/controls/pause.svg")
                 audio.play();
                 audioStatusContainer = "paused";
@@ -155,9 +155,7 @@ backward.addEventListener("click", () => {
     if(currentPlaylist === "none"){
         currentlyPlaying -= 1;
         if(currentlyPlaying >= 0){
-            audioImage.setAttribute("src", `assets/images/${musicLibrary[currentlyPlaying].image}.jpg`)
-            audio.setAttribute("src", `assets/${musicLibrary[currentlyPlaying].title.toLocaleLowerCase()}.mp3`);
-            audioTitle.textContent = `${musicLibrary[currentlyPlaying].title} - ${musicLibrary[currentlyPlaying].artist}`
+            playAudio(currentlyPlaying)
             audioStatus.setAttribute("src", "assets/controls/pause.svg")
             audio.play();
             audioStatusContainer = "paused";
@@ -174,9 +172,7 @@ backward.addEventListener("click", () => {
         let nextSongPlaylistIndex = playlistData[playlistIndex].data.indexOf(currentPlaylistSong) - 1; 
         if( nextSongPlaylistIndex >= 0){
             currentPlaylistSong = playlistData[playlistIndex].data[nextSongPlaylistIndex];
-            audioImage.setAttribute("src", `assets/images/${musicLibrary[currentPlaylistSong].image}.jpg`)
-            audio.setAttribute("src", `assets/${musicLibrary[currentPlaylistSong].title.toLocaleLowerCase()}.mp3`);
-            audioTitle.textContent = `${musicLibrary[currentPlaylistSong].title} - ${musicLibrary[currentPlaylistSong].artist}`;
+            playAudio( currentPlaylistSong)
             audioStatus.setAttribute("src", "assets/controls/pause.svg")
             audio.play();
             audioStatusContainer = "paused";
@@ -201,7 +197,7 @@ savePlaylist.addEventListener("click", () => {
     }
     else{
         newPlayListContainer.style.display = "none";
-        creatingPlaylistUI();
+        creatingPlaylistUI(playlistName.value);
         SelectSongsContainer.style.display = "flex";
         let playlist = {title: playlistName.value.toLocaleLowerCase(), data: []};
         playlistData.push(playlist);
@@ -215,7 +211,7 @@ function checker(playlist){
     return playlist.title !== playlistName.value.toLocaleLowerCase();
 }
 
-function creatingPlaylistUI(){
+function creatingPlaylistUI(playlist){
     let firstDiv = document.createElement("div");
     firstDiv.className = "playlist";
     let innerDiv = document.createElement("button");
@@ -223,7 +219,8 @@ function creatingPlaylistUI(){
     innerDiv.addEventListener("click", viewPlaylist);
     innerDiv.style.backgroundImage = "url('./assets/images/image1.jpg')";
     let playListTitle = document.createElement("p");
-    playListTitle.textContent = playlistName.value;
+    playListTitle.textContent = playlist;
+    playListTitle.style.textTransform = "capitalize";
     firstDiv.appendChild(innerDiv);
     firstDiv.appendChild(playListTitle);
     playlistContainer.prepend(firstDiv);
@@ -372,7 +369,15 @@ function playSong(evt){
     audioImage.setAttribute("src", `assets/images/${musicLibrary[songIndex].image}.jpg`)
     audio.setAttribute("src", `assets/${musicLibrary[songIndex].title.toLocaleLowerCase()}.mp3`);
     audioTitle.textContent = `${musicLibrary[songIndex].title} - ${musicLibrary[songIndex].artist}`
-    audioStatus.setAttribute("src", "assets/controls/pause.svg")
+    audioStatus.setAttribute("src", "assets/controls/pause.svg");
+    playPlayistSong.style.display = "none";
     audio.play();
     audioStatusContainer = "paused";
 }
+
+function playAudio(index){
+    audioImage.setAttribute("src", `assets/images/${musicLibrary[index].image}.jpg`)
+    audio.setAttribute("src", `assets/${musicLibrary[index].title.toLocaleLowerCase()}.mp3`);
+    audioTitle.textContent = `${musicLibrary[index].title} - ${musicLibrary[index].artist}`
+}
+

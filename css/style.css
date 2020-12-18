@@ -319,3 +319,7 @@ small{
     height: 65%;
     justify-content: center;
 }
+
+#playlistSavedContainer{
+    transition: 0.3s transform ease-out;
+}
