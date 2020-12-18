@@ -312,3 +312,10 @@ small{
     cursor: pointer;
     padding-left: 0.5em;
 }
+
+#storedPlaylistSongsContainer{
+    display: flex;
+    flex-direction: column;
+    height: 65%;
+    justify-content: center;
+}

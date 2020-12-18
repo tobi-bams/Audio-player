@@ -29,6 +29,8 @@ let cancelPlaySongs = document.getElementById("cancelPlaySongs");
 let storedPlaylistSongsContainer = document.getElementById("storedPlaylistSongsContainer");
 let currentPlaylist = "none";
 let currentPlaylistSong = "";
+let platlistAlreadyExist = document.getElementById("platlistAlreadyExist");
+let localStorage = window.localStorage;
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
@@ -186,9 +188,16 @@ backward.addEventListener("click", () => {
 // Playlist code
 
 savePlaylist.addEventListener("click", () => {
+    let notExist = true
+    if(playlistData.length > 0){
+        notExist = playlistData.every(checker);
+    }
     if(playlistName.value === ""){
         playlistName.style.border = "2px solid black";
         playlistNameError.style.display = "inline";
+    }else if(notExist === false){
+        playlistName.style.border = "2px solid black";
+        platlistAlreadyExist.style.display = "inline";
     }
     else{
         newPlayListContainer.style.display = "none";
@@ -196,10 +205,15 @@ savePlaylist.addEventListener("click", () => {
         SelectSongsContainer.style.display = "flex";
         let playlist = {title: playlistName.value.toLocaleLowerCase(), data: []};
         playlistData.push(playlist);
+        localStorage.setItem("playlistData", `${JSON.stringify(playlistData)}`);
         displaySongs(playlistName.value);
         playlistName.value = "";
     } 
 });
+
+function checker(playlist){
+    return playlist.title !== playlistName.value.toLocaleLowerCase();
+}
 
 function creatingPlaylistUI(){
     let firstDiv = document.createElement("div");
@@ -229,6 +243,7 @@ cancel.addEventListener("click", () => {
     playlistName.value = "";
     playlistName.style.border = "2px solid grey";
     playlistNameError.style.display = "none";
+    platlistAlreadyExist.style.display = "none";
 });
 
 saveSongs.addEventListener("click", () => {
@@ -305,36 +320,48 @@ function addSongToPlayList(evt){
         playlistData[index].data.push(songIndex);
        evt.target.previousElementSibling.firstElementChild.style.backgroundColor = "black";
         evt.target.setAttribute("data-status", "added");
+        localStorage.setItem("playlistData", `${JSON.stringify(playlistData)}`);
     }
     else{
         let deleteIndex = playlistData[index].data.indexOf(songIndex)
         playlistData[index].data.splice(deleteIndex, 1);
         evt.target.previousElementSibling.firstElementChild.style.backgroundColor = "white";
         evt.target.setAttribute("data-status", "notAdded");
-    }    
+        localStorage.setItem("playlistData", `${JSON.stringify(playlistData)}`);
+    } 
+   
 }
+
 
 function playlistSavedMusicDispay(playlistTitle){
     playPlaylistTitle.textContent = playlistTitle;
     let playlistIndex = playlistData.findIndex((playlist) => {
         return playlist.title == playlistTitle.toLocaleLowerCase();
     })
+    if(playlistData[playlistIndex].data.length > 0){
+        playlistData[playlistIndex].data.forEach((index) => {
+            let container = document.createElement("div");
+            container.setAttribute("class", "songs");
+            let playButton = document.createElement("img");
+            playButton.setAttribute("src", "./assets/controls/play.svg");
+            playButton.setAttribute("class", "playSongButton");
+            let songTitle = document.createElement("p");
+            songTitle.textContent = `${musicLibrary[index].title} - ${musicLibrary[index].artist}`;
+            songTitle.setAttribute("class", "currentPlaylistSongTitle");
+            songTitle.setAttribute("song-index", `${index}`);
+            songTitle.addEventListener("click", playSong)
+            container.appendChild(playButton);
+            container.appendChild(songTitle);
+            storedPlaylistSongsContainer.appendChild(container);
+        })
+    }
+    else{
+        let emptyPlaylistMessage = document.createElement("p");
+        emptyPlaylistMessage.textContent = "Empty Playlist.......";
+        emptyPlaylistMessage.style.textTransform = "uppercase";
+        storedPlaylistSongsContainer.appendChild(emptyPlaylistMessage);
+    }
 
-    playlistData[playlistIndex].data.forEach((index) => {
-        let container = document.createElement("div");
-        container.setAttribute("class", "songs");
-        let playButton = document.createElement("img");
-        playButton.setAttribute("src", "./assets/controls/play.svg");
-        playButton.setAttribute("class", "playSongButton");
-        let songTitle = document.createElement("p");
-        songTitle.textContent = `${musicLibrary[index].title} - ${musicLibrary[index].artist}`;
-        songTitle.setAttribute("class", "currentPlaylistSongTitle");
-        songTitle.setAttribute("song-index", `${index}`);
-        songTitle.addEventListener("click", playSong)
-        container.appendChild(playButton);
-        container.appendChild(songTitle);
-        storedPlaylistSongsContainer.appendChild(container);
-    })
 }
 
 function playSong(evt){
