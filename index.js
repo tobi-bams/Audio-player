@@ -32,6 +32,8 @@ let currentPlaylistSong = "";
 let platlistAlreadyExist = document.getElementById("platlistAlreadyExist");
 let localStorage = window.localStorage;
 let playlistSavedContainer = document.getElementById("playlistSavedContainer");
+let repeatButton = document.getElementById("repeatButton");
+let repeatStatus = false;
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
                         {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
@@ -71,14 +73,19 @@ audio.addEventListener("timeupdate", (evt) => {
     if(audio.currentTime === audio.duration){
         if(currentPlaylist === "none"){
             currentlyPlaying += 1;
-        if(currentlyPlaying < musicLibrary.length){
-            playAudio(currentlyPlaying);
-            audio.play();
-        }
-        else{
-            audioStatus.setAttribute("src", "assets/controls/play.svg");
-            audioStatusContainer = "playing";
-        }
+            if(currentlyPlaying < musicLibrary.length){
+                playAudio(currentlyPlaying);
+                audio.play();
+            }
+            else if((currentlyPlaying === musicLibrary.length) && (repeatStatus === true)){
+                currentlyPlaying = 0;
+                playAudio(currentlyPlaying);
+                audio.play();
+            }
+            else{
+                audioStatus.setAttribute("src", "assets/controls/play.svg");
+                audioStatusContainer = "playing";
+            }
         }
         else{
             let playlistIndex = playlistData.findIndex((playlist) => {
@@ -86,6 +93,12 @@ audio.addEventListener("timeupdate", (evt) => {
             }) 
             let nextSongPlaylistIndex = playlistData[playlistIndex].data.indexOf(currentPlaylistSong) + 1;
             if(nextSongPlaylistIndex < playlistData[playlistIndex].data.length){
+                currentPlaylistSong = playlistData[playlistIndex].data[nextSongPlaylistIndex];
+                playAudio(currentPlaylistSong);
+                audio.play();
+            }
+            else if((nextSongPlaylistIndex === playlistData[playlistIndex].data.length) && (repeatStatus === true)){
+                nextSongPlaylistIndex = 0;
                 currentPlaylistSong = playlistData[playlistIndex].data[nextSongPlaylistIndex];
                 playAudio(currentPlaylistSong);
                 audio.play();
@@ -133,7 +146,9 @@ forward.addEventListener("click", () => {
                 audioStatusContainer = "paused";
         }
         else{
-            currentlyPlaying -= 1;
+            currentlyPlaying = 0;
+            playAudio(currentlyPlaying);
+            audio.play();
         }
     }
     else{
@@ -147,6 +162,12 @@ forward.addEventListener("click", () => {
                 audioStatus.setAttribute("src", "assets/controls/pause.svg")
                 audio.play();
                 audioStatusContainer = "paused";
+        }
+        else{
+            nextSongPlaylistIndex = 0;
+            currentPlaylistSong = playlistData[playlistIndex].data[nextSongPlaylistIndex];
+            playAudio(currentPlaylistSong);
+            audio.play();
         }
     } 
 })
@@ -381,3 +402,13 @@ function playAudio(index){
     audioTitle.textContent = `${musicLibrary[index].title} - ${musicLibrary[index].artist}`
 }
 
+repeatButton.addEventListener("click", (evt) => {
+    if(repeatStatus === false){
+        evt.target.parentElement.style.backgroundColor = "white";
+        repeatStatus = true;
+    }
+    else{
+        evt.target.parentElement.style.backgroundColor = "transparent";
+        repeatStatus = false;
+    }
+})

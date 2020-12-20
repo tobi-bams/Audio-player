@@ -61,7 +61,7 @@ main{
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 80%;
+    height: 78%;
     padding: 2em;
     box-sizing: border-box;
 }
@@ -80,7 +80,7 @@ main{
 }
 
 .controls{
-    height: 20%;
+    height: 22%;
     width: 100%;
     background-color: grey;
     box-sizing: border-box;
@@ -92,7 +92,7 @@ main{
 }
 
 .control{
-    height: 2.5em;
+    height: 2em;
     margin-bottom: 0.5em;
     padding-left: 1em;
     padding-right: 1em;
@@ -118,6 +118,7 @@ main{
     display: flex;
     justify-content: space-between;
     color: white;
+    margin-top: 0.6em;
 }
 
 /* Creating PlayList UI */
@@ -322,4 +323,82 @@ small{
 
 #playlistSavedContainer{
     transition: 0.3s transform ease-out;
+}
+
+#repeatButton{
+    padding-top: 0.5em;
+    width: 2em;
+    height: 2em;
+}
+
+.repeatButtonContainer{
+    height: 2.3em;
+    width: 4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1em;
+    transition: 1s background ease-out;
+    margin-top: 0.3em;
+    margin-bottom: 0.7em;
+}
+
+/* Stling the range Element */
+input[type=range]{
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+input[type=range]{
+    -webkit-appearance: none;
+}
+
+input[type=range]:focus{
+    outline: none;
+}
+
+input[type=range]::-ms-track{
+    width: 100%;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 1px solid white;
+    height: 1.5em;
+    width: 1.5em;
+    background: white;
+    border-radius: 50%;
+    margin-top: -0.75em;
+}
+
+/* Fire Fox */
+input[type=range]::-moz-range-thumb {
+    -webkit-appearance: none;
+    border: 1px solid white;
+    height: 1.5em;
+    width: 1.5em;
+    background: white;
+    border-radius: 50%;
+    margin-top: -0.75em;
+}
+
+input[type=range]::-webkit-slider-runnable-track{
+    width: 100%;
+    height: 2px;
+    background: rgb(199, 196, 196);
+}
+
+input[type=range]::-moz-range-track{
+    width: 100%;
+    height: 2px;
+    background: rgb(199, 196, 196);
+}
+
+input[type=range]::-moz-range-progress{
+    height: 3px;
+    background: white;
 }
