@@ -32,6 +32,8 @@ main{
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .playlist{
@@ -67,7 +69,7 @@ main{
 }
 
 #audioImage{
-    height: 20em;
+    height: 17em;
     max-width: 100%;
     border-radius: 1em;
 }
