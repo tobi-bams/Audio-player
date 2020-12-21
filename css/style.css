@@ -263,11 +263,15 @@ small{
 
 .songs{
     display: flex;
-    height: 2.5em;
+    height: 2.6em;
     width: 100%;
     border-bottom: 1px solid black;
     align-items: center;
     box-sizing: border-box;
+}
+
+.songs p{
+    font-size: 0.9rem;
 }
 
 .radioButton{
