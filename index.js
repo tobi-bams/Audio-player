@@ -36,8 +36,8 @@ let repeatButton = document.getElementById("repeatButton");
 let repeatStatus = false;
 
 const musicLibrary = [{title: "Tonight", artist: "Nonso Amadi", image: "image1"}, {title: "Say Something", artist: "A Great Big World", image: "image2"},
-                        {title: "No Longer Beneficial", artist: "Simi", image: "image3"}, {title: "Never Enough", artist: "Loren Allred", image: "try"},
-                        {title: "Someone Like You", artist: "Adele", image: "image1"}];
+                        {title: "No Longer Beneficial", artist: "Simi", image: "simi1"}, {title: "Duduke", artist: "Simi", image: "simi2"},
+                        {title: "Okay", artist: "Adekunle Gold", image: "gold"}];
 
 
 let playlistData = [];
